@@ -18,3 +18,6 @@
 
 ---
 
+## 참고 자료
+
+- [Fluent Python 2e example code](https://github.com/fluentpython/example-code-2e)
