@@ -13,9 +13,11 @@
 ### 오브젝트의 문자열 representation
 - `__repr__`은 콘솔과 디버거에서 쓰이는 오브젝트의 문자열 representation을 구현한다.
   - `repr`함수를 통해서 호출한다.
-- `"Representation of an object is %r" % object`
-- `"Represetation of an object is {obj!r}".format(obj=object)`
-- `f"Representation of and object is {object!r}"`
+  - `"Representation of an object is %r" % object`
+  - `"Represetation of an object is {obj!r}".format(obj=object)`
+  - `f"Representation of and object is {object!r}"`
+- `__str__`은 `str()` built-in 함수에 의해 호출된다. `print()`함수에 의해 쓰인다.
+  - `__str__`이 구현되어있지 않으면 `__repr__` 함수가 호출된다.
 
 ### 오브젝트의 불리언 값
 - 어떤 값 `x`가 참 값인지 거짓 값인지 평가할 때 파이썬은 `bool(x)`함수를 호출한다.
