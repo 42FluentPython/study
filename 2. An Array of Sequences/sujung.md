@@ -50,3 +50,110 @@
 * **ob_type** - 객채 타입에 대한 포인터
 * **ob_fval** - C의 double형
 
+### Another Way of grouping sequence type is by mutability
+* **Mutable Sequences** - list, bytearray, array.array, collections.deque.
+* **Immutable Sequences** - tuple, str, bytes
+  
+**example**
+```python
+>>> from collections import abc
+>>> issubclass(list, abc.Sequence)
+True
+>>> issubclass(list, abc.MutableSequence)
+True
+>>> issubclass(list, abc.Collection)
+True
+>>> issubclass(list, abc.Reversible)
+True
+```
+
+## List Comprehensions and Generator Expressions
+### [Comprehensions Syntax](https://docs.python.org/ko/3/reference/expressions.html?highlight=list%20comprehension#displays-for-lists-sets-and-dictionaries)
+```
+comprehension ::= assignment_expression comp_for
+comp_for      ::= [ "async" ] "for" target_list "in" or_test [ comp_iter ]
+comp_iter     ::= comp_for | comp_if
+comp_if       ::= "if" or_test [ comp_iter ]
+```
+### List Comprehensions and Readability
+**example.1 - non listcomps**
+```python
+>>> symbols = '$¢£¥€¤'
+>>> codes = []
+>>> for symbol in symbols:
+...     codes.append(ord(symbol))
+...
+>>> codes
+[36, 162, 163, 165, 8364, 164]
+```
+**example.2 - listcomps**
+```python
+>>> symbols='$¢£¥€¤'
+>>> codes = [ord(symbol) for symbol in symbols]
+>>> codes
+[36, 162, 163, 165, 8364, 164]
+```
+
+### Local Scope Within Comprehensions and Generator Expressions
+[pep-572](https://peps.python.org/pep-0572/)\
+**example.1 - non generator expressions**
+```python
+>>> x = 'ABC'
+>>> codes = [ord(x) for x in x]
+>>> x
+'ABC'
+>>> codes
+[65, 66, 67]
+```
+**example.2 - generator expressions**
+```python
+>>> x = 'ABC'
+>>> codes = [last := ord(c) for c in x]
+>>> last
+67
+>>> c
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'c' is not defined
+```
+Walrus Operator라고 불리는 `:=` 연산자로 할당하면 comprehensions 또는 expressions을 사용하더라도 접근 가능하게 해줌.
+
+### Listcomps Versus map and filter
+**example.1 - listcomp vs map/filter**
+```python
+>>> symbols = '$¢£¥€¤'
+>>> beyond_ascii = [ord(s) for s in symbols if ord(s) > 127]
+>>> beyond_ascii
+[162, 163, 165, 8364, 164]
+>>> beyond_ascii = list(filter(lambda c: c > 127, map(ord, symbols))) >>> beyond_ascii
+[162, 163, 165, 8364, 164]
+```
+map/filter로 하는 모든것은 listcomp로 할 수 있음.
+
+### Cartesian Products
+listcomps는 데카르트 곱으로 부터 리스트를 만들 수 있음.
+
+**example.1 - Cartesian product using a list comprehension**
+```python
+>>> colors = ['black', 'white']
+>>> sizes = ['S', 'M', 'L']
+>>> tshirts = [(color, size) for color in colors for size in sizes]
+>>> tshirts
+[('black', 'S'), ('black', 'M'), ('black', 'L'), ('white', 'S'), ('white', 'M'), ('white', 'L')]
+>>> for color in colors:
+...     for size in sizes:
+...         print((color, size))
+...
+('black', 'S')
+('black', 'M')
+('black', 'L')
+('white', 'S')
+('white', 'M')
+('white', 'L')
+>>> tshirts = [(color, size) for size in sizes for color in colors]
+>>> tshirts
+[('black', 'S'), ('white', 'S'), ('black', 'M'), ('white', 'M'), ('black', 'L'), ('white', 'L')]
+```
+1. 생성된 리스트의 튜플은 color, size에 의해 정렬.
+2. 정렬된 리스트의 결과에 주목, `for loops`의 중첩된 동일한 순서로 `listcomp`는 생성됨.
+3. size, 그리고 color 순서로 정렬된 아이템을 얻기 위해 for 구문을 재정렬 하면됨.
