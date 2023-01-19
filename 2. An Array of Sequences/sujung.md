@@ -157,3 +157,64 @@ listcomps는 데카르트 곱으로 부터 리스트를 만들 수 있음.
 1. 생성된 리스트의 튜플은 color, size에 의해 정렬.
 2. 정렬된 리스트의 결과에 주목, `for loops`의 중첩된 동일한 순서로 `listcomp`는 생성됨.
 3. size, 그리고 color 순서로 정렬된 아이템을 얻기 위해 for 구문을 재정렬 하면됨.
+
+## Generator Expressions
+### [Generator Expressions Syntax](https://docs.python.org/ko/3/reference/expressions.html?highlight=list%20comprehension#generator-expressions)
+```
+generator_expression ::= "(" expression comp_for ")"
+```
+tuple, array 등의 sequences를 초기화하기 위해, `listcomp`뿐만 아니라 `genexp`를 사용 할 수 있음.\
+**example.1 - tuple and array genexp**
+```python
+>>> symbols = '$¢£¥€¤'
+>>> tuple(ord(symbol) for symbol in symbols)
+(36, 162, 163, 165, 8364, 164)
+>>> import array
+>>> array.array('I', (ord(symbol) for symbol in symbols))
+array('I', [36, 162, 163, 165, 8364, 164])
+```
+**example.2 - Cartesian product in a generator expression**
+```python
+>>> colors = ['black', 'white']
+>>> sizes = ['S', 'M', 'L']
+>>> for tshirt in (f'{c} {s}' for c in colors for s in sizes):
+...     print(tshirt)
+...
+black S
+black M
+black L
+white S
+white M
+white L
+```
+
+## Tuples Are Not Just Immutable Lists
+튜플은 불변 리스트로의 사용, 필드네임이 없는 레코드로도 사용 가능함.
+
+### Tuples as Records
+* Tuples hold records - 튜플의 각 항목은 하나의 필드에 대한 데이터를 보유하며, 항목의 위치는 항목의 의미를 줌.
+  
+튜플을 단순히 불변의 목록으로 생각한다면, 상황에 따라 항목의 수량과 순서가 중요할 수도 있고 중요하지 않을 수도 있음.\
+반면 튜플을 필드의 집합으로 사용하면, 항목의 수는 보통 고정되어야 하며 그들의 순서 또한 중요해짐.\
+**example.1 - Tuples used as records**
+```python
+>>> lax_coordinates = (33.9425, -118.408056)
+>>> city, year, pop. chg, area = ('Tokyo', 2003, 32_450, 0.66, 8014)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: too many values to unpack (expected 4)
+>>> city, year, pop, chg, area = ('Tokyo', 2003, 32_450, 0.66, 8014)
+>>> traveler_ids = [('USA', '31195855'), ('BRA', 'CE342567'), ('ESP', 'XDA205856')]
+>>> for passport in sorted(traveler_ids):
+...     print('%s%s' % passport)
+...
+BRACE342567
+ESPXDA205856
+USA31195855
+>>> for country, _ in traveler_ids:
+...     print(country)
+...
+USA
+BRA
+ESP
+```
