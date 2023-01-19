@@ -16,4 +16,6 @@
 
 # 참고 자료
 
+- [https://www.fluentpython.com/](https://www.fluentpython.com/)
+- [https://fpy.li/](https://fpy.li/)
 - [Fluent Python 2e example code](https://github.com/fluentpython/example-code-2e)
