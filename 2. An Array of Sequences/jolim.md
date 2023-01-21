@@ -160,6 +160,13 @@ Traceback (most recent call last):
 TypeError: func() missing 1 required keyword-only argument: 'd'
 ```
 
+- `*_` 대신 `*`을 사용할 수 있다.
+```python
+def func(*, a, b):
+    pass
+```
+
+
 ### 언패킹을 이용해 Sequent Literal 만들기
 ```python
 >>> *range(4), 4                  # tuple
