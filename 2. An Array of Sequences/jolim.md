@@ -521,6 +521,7 @@ True
   - `.typecode`: attribute이다. C type을 나타내는 1자의 string code이다.
 
 ### Memory Views
+- [When should a memoryview be used?](https://fpy.li/2-17)
 - 공유 메모리 sequence type
   - byte를 복사하지 않고 array의 slice를 다룰 수 있다.
 - `memoryview.cast`는	복사나 bit 변화 없이 byte를 읽고 쓰는 방법을 바꾸게 해준다.
