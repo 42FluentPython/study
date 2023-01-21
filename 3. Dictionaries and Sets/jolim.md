@@ -664,3 +664,81 @@ classDiagram
         __isub__
     }
 ```
+
+## 수학적 집합 연산
+- S ∩ Z
+  - `s & z` (`s.__and(z)`)
+  - `z & s` (`s.__rand(z)`)
+  - `s.intersection(it, ...)`: it는 iterable일 수 있음.
+  - `s &= z` (`s.__iand__(z)`)
+  - `s.intersection_update(it, ...)`: it는 iterable일 수 있음. 
+- S ∪ Z
+  - `s | z` (`s.__or(z)`)
+  - `z | s` (`s.__ror(z)`)
+  - `s.union(it, ...)`: it는 iterable일 수 있음.
+  - `s |= z` (`s.__iors__(z)`)
+  - `s.update(it, ...)` : it는 iterable일 수 있음.
+- S \ Z (S - Z)
+  - `s - z` (`s.__sub__(z)`)
+  - `z - s` (`s.__rsub__(z)`)
+  - `s.difference(it, ...)`: it는 iterable일 수 있음.
+  - `s -= z` (`s.__isub__(z)`)
+  - `s.difference_update(it, ...)`: it는 iterable일 수 있음.
+- S △ Z (symmetric difference)
+  - `s ^ z` (`s.__xor__(z)`)
+  - `z ^ s` (`s.__rxor__(z)`)
+  - `s.symmetric_difference(it)`
+  - `s ^= z` (`s.__ixor__(z)`)
+  - `s.symmetric_difference_update(it, ...)`
+
+## 집합 비교 연산
+- S ∩ Z = ∅
+  - `s.disjoint(z)`
+- e ∈ S
+  - `e in S` (`s.__contains__(e)`)
+- S ⊆ Z
+  - `s <= z` (`s.__le__(z)`, `s.issubset(it)`)
+- S ⊂ Z
+  - `s < z` (`s.__lt__(z)`)
+- S ⊇ Z
+  - `s >= z` (`s.__ge__(z)`, `s.issuperset(it)`)
+- S ⊃ Z
+  - `s > z` (`s.__gt(z)`)
+
+## 추가적인 set 연산
+- `frozenset`과 `set`에서 모두 가능
+  - `s.copy()`: 얕은 복사
+  - `iter(s)` (`s.__iter__`): s의 iterator 얻기
+  - `len(s)` (`s.__len__`): s의 크기 얻기
+
+- `set`에서만 가능
+  - `s.add(e)`: 요소 e를 s에 추가
+  - `s.clear()`: 모든 요소를 제거
+  - `s.discard(e)`: 요소 e가 s에 존재한다면 제거
+  - `s.pop()`: s에서 요소 하나(첫 번째 표시된 요소)를 제거하고 리턴.
+    - `s`가 비어있으면 `KeyError` 발생
+  - `s.remove(e)`: `s`에서 요소 `e` 제거
+    - `s`에 요소 `e`가 없으면 `KeyError` 발생
+
+## Dict View에 대한 집합 연산
+- `.keys()`와 `.items()`는 `frozenset`과 비슷하다.
+- 공통점
+  - `s & z`, `z & s`, `s | z`, `z | s`, `s - z`, `z - s`, `s ^ z`, `z ^ s`, `e in s`, 가능
+  - `iter(s)`, `len(s)` 가능
+  - `s.isdisjoint(z)` 가능
+- `frozenset`에서만 되는 것
+  - `s.copy()`, `s.differnece(it, ...)`, `s.issubset(it)`, `s.issuperset(it)`, `s.symmetric_difference(it)`, `s.union(it, ...)`
+- `dict_keys`, `dict_items`에서만 되는 것
+  - `reversed(s)`
+
+- 리턴값들이 `set`인 것에 주의.
+  - set과의 연산도 가능하다.
+
+caution.
+  - `dict_items`는 모든 요소가 hashable일 때만 set처럼 동작한다.
+  - `dict_keys`는 모든 요소가 이미 hashable이다.
+
+## Further Reading
+- [Python Dictionaries Are Now Ordered. Keep Using Ordered Dict](https://fpy.li/3-18)
+  - `OrderedDict`를 계속 사용해야한다는 주장
+- [uintset](https://fpy.li/3-30)
