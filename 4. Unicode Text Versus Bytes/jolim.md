@@ -189,6 +189,7 @@ b'S&#257;o Paulo'
   - ASCII는 거의 대부분의 인코딩과 호환이 된다.
   - 따라서 텍스트가 ASCII로 이루어져 있다면 인코딩은 성공한다.
   - 해당 메소드로 `UnicodeEncodeError`가 발생할 지 아닐 지 알 수 있다.
+- `codecs.register_error(name, error_handler)`
 
 ### `UnicodeDeocdeError` 다루기
 - 모든 바이트가 유효한 ASCII 문자는 아니며, 모든 바이트 시퀀스가 유효한 UTF-8이나 UTF-16인 것은 아니다.
