@@ -4,7 +4,7 @@
   - byte sequence와 unicode간의 묵시적 변환은 더 이상 지원하지 않는다.
 - 이 장에서는 유니코드 문자열, binary sequence, 두 sequence 간의 변환에 이용되는 인코딩을 다룬다.
 - 유니코드를 다루는 것은 중요하다.
-  - `str`과 `byte`의 차이에서 생기는 문제는 피할 수 업삳.
+  - `str`과 `byte`의 차이에서 생기는 문제는 피할 수 없다.
 - binary sequence 타입은 python2의 다용도 `str`가 지원하지 않는 기능들을 지원한다.
 
 ### 이 챕터에서 다루는 토픽들
@@ -189,6 +189,7 @@ b'S&#257;o Paulo'
   - ASCII는 거의 대부분의 인코딩과 호환이 된다.
   - 따라서 텍스트가 ASCII로 이루어져 있다면 인코딩은 성공한다.
   - 해당 메소드로 `UnicodeEncodeError`가 발생할 지 아닐 지 알 수 있다.
+- `codecs.register_error(name, error_handler)`
 
 ### `UnicodeDeocdeError` 다루기
 - 모든 바이트가 유효한 ASCII 문자는 아니며, 모든 바이트 시퀀스가 유효한 UTF-8이나 UTF-16인 것은 아니다.
@@ -434,6 +435,12 @@ True
     - 일반 slash로 검색하면 검색되지 않는다.
   - NFKC와 NFKD는 데이터 손실이 있을 수 있기 때문에 특별한 상황에서만 사용해야 한다.
     - 영구적인 데이터 저장에는 절대 사용하지 마시오
+
+### 한글 NFC NFD 문제
+- 한글은 조합형(NFD 형태), 완성형 형태(NFC 형태)가 있다.
+  - MacOS는 조합형과 완성형을 둘 다 지원하는데 기본형은 조합형이다.
+  - 윈도우즈에서는 완성형 형태만 지원한다.
+  - 따라서 MacOS에서 윈도우즈로 파일을 옮길 때 자형이 깨지는 문제가 있다. 
 
 ### 대소문자 변경 (case folding)
 - case folding이란 소문자화인데, 추가적인 변화가 붙어있다.
