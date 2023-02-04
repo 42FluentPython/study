@@ -22,6 +22,8 @@ TypeError: unsupported operand type(s) for *: 'Gizmo' and 'int'
 - `Gizmo`가 생기고, * 연산에서 오류가 발생하고, y 변수는 생성되지 않는다.
 
 ## Identity, Equlity(동등), Aliases
+- 모든 파이썬 오브젝트는 identity, 타입, 값을 가진다.
+  - 값만이 바뀔 수 있다.
 ```python
 >>> charles = {'name': 'Charlse L. Dodgson', 'born': 1832}
 >>> lewis = charles
@@ -71,7 +73,8 @@ True
 - list를 복사할 때 `[:]`를 이용할 수도 있다.
 ...
 
-## 함수 매개변수는 레퍼런스이다.
+## 함수 매개변수는 항상 레퍼런스이다.
+- 이는 피할 수 없다.
 - immutable 객체는 레퍼런스로 건네지지만 변하지 않는다.
   - mutable 객체는 레퍼런스로 건네지고 변할 수 있다.
 ```python
@@ -99,6 +102,17 @@ True
 ((10, 20), (30, 40))
 >>> 
 ```
+
+## 가비지 콜렉터와 `close()`
+
+- (현재) CPython에서 다음은 안전하다.
+```python
+open('test.txt', 'wt', encoding='utf-8').write('1 2 3')
+```
+- `open`에서 생성된 객체는 `write` 연산이 끝난 후 가비지 콜렉팅되면서 `close`가 자동으로 실행된다.
+- 미래에는 어떻게 될 지 모르고, CPython이 아닌 구현에서는 안전하지 않다.
+- 항상 `with`를 쓰자.
+
 
 ## 매개변수의 기본값을 mutable로 사용하면 안된다.
 ```python
@@ -196,3 +210,42 @@ bye
 >>> ender.alive
 False
 ```
+- `weakref`가 객체를 지켜보고 있는데도 메모리가 회수된 이유
+  - [Weak References](https://fpy.li/weakref)
+
+## immutable의 이상한 행동
+- `tuple`의 경우에 `t1 = tuple(t2)`나 `t1 = t2[:]`는 복사본이 만들어지지 않는다.
+```python
+>>> t1 = 1, 2, 3
+>>> t2 = tuple(t1)
+>>> t1 is t2
+True
+>>> t3 = t1[:]
+>>> t1 is t3
+True
+```
+- `str`과 `int`는 interning이 있다.
+  - 간단한 문자열 리터럴과 간단한 숫자들은 복사본이 만들어지지 않는다.
+```python
+>>> t1 = 1, 2, 3
+>>> t2 = 1, 2, 3
+>>> t1 is t2
+False
+>>> s1 = "this is string literal"
+>>> s2 = "this is string literal"
+>>> s1 is s2
+False
+>>> s1 = 'a'
+>>> s2 = 'a'
+>>> s1 is s2
+True
+>>> a = 12345678
+>>> b = 12345678
+>>> a is b
+False
+>>> a = 1
+>>> b = 1
+>>> a is b
+True
+```
+- 그러나 항상 `==` 연산을 사용하자.
