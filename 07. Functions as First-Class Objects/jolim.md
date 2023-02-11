@@ -294,6 +294,7 @@ LatLon(lat=11.1, lon=22.2)
 ```
 
 ## `functools.partial`로 매개변수 고정시키기.
+- partial은 positinal이나 keyword argument를 고정시킬 수 있다.
 ```python
 >>> from operator import mul
 >>> from functools import partial
