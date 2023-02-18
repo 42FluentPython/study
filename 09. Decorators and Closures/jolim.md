@@ -759,4 +759,73 @@ if __name__ == '__main__':
 [0.12621654s] snooze(0.123) -> None
 ```
 - `locals` 내장 함수는 지역 변수와 그 값을 `dict`로 리턴한다.
-- 데코레이터 
+- 데코레이터 팩토리는 클래스로 구현하는 것이 더 나을 때가 많다.
+```python
+import time
+
+DEFAULT_FMT = '[{elapsed:0.8f}s] {name}({args}) -> {result}'
+
+class clock:  # <1>
+
+    def __init__(self, fmt=DEFAULT_FMT):  # <2>
+        self.fmt = fmt
+
+    def __call__(self, func):  # <3>
+        def clocked(*_args):
+            t0 = time.perf_counter()
+            _result = func(*_args)  # <4>
+            elapsed = time.perf_counter() - t0
+            name = func.__name__
+            args = ', '.join(repr(arg) for arg in _args)
+            result = repr(_result)
+            print(self.fmt.format(**locals()))
+            return _result
+        return clocked
+# end::CLOCKDECO_CLS[]
+
+if __name__ == '__main__':
+
+    @clock()
+    def snooze(seconds):
+        time.sleep(seconds)
+
+    for i in range(3):
+        snooze(.123)
+```
+```python
+import time
+
+DEFAULT_FMT = "[{elapsed:0.8f}s] {name}({args}) -> {result}"
+
+
+class clock:  # <1>
+    def __init__(self, fmt=DEFAULT_FMT):  # <2>
+        self.fmt = fmt
+
+    def __call__(self, func):  # <3>
+        def clocked(*_args):
+            t0 = time.perf_counter()
+            _result = func(*_args)  # <4>
+            elapsed = time.perf_counter() - t0
+            name = func.__name__
+            args = ", ".join(repr(arg) for arg in _args)
+            result = repr(_result)
+            print(self.fmt.format(**locals()))
+            return _result
+
+        return clocked
+
+
+if __name__ == "__main__":
+
+    @clock()
+    def snooze(seconds):
+        time.sleep(seconds)
+
+    for i in range(3):
+        snooze(0.123)
+```
+- decorate 함수를 만드는 부분과 내부 클로저를 다루는 부분을 나눌 수 있다.
+
+## 더 읽기
+- `functools.wrap`함수를 항상 쓰자
